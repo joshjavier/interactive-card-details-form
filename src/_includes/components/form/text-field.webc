@@ -1,0 +1,58 @@
+<label :for="id" @text="label"></label>
+
+<div webc:if="datefield" class="date-inputs flex gap">
+  <input type="text" :id="id" placeholder="MM" maxlength="2" />
+  <input type="text" placeholder="YY" maxlength="2" />
+</div>
+<div webc:else>
+  <input
+    type="text"
+    :id="id"
+    :placeholder="placeholder"
+    :aria-describedby="`${id}-error`"
+  />
+</div>
+
+<div :id="`${id}-error`" class="error"></div>
+
+<style webc:scoped>
+  :host {
+    font-size: calc(12 / 16 * 1rem);
+    letter-spacing: 0.06px;
+  }
+
+  label {
+    text-transform: uppercase;
+    letter-spacing: 1.98px;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid hsl(var(--light-grayish-violet));
+    border-radius: calc(8 / 16 * 1rem);
+    padding: calc(11 / 16 * 1rem) calc(16 / 16 * 1rem);
+    margin-top: calc(9 / 16 * 1rem);
+    font-size: calc(18 / 16 * 1rem);
+  }
+
+  input::placeholder {
+    color: hsl(var(--dark-grayish-violet));
+  }
+
+  .error {
+    color: hsl(var(--error));
+    margin-top: calc(8 / 16 * 1rem);
+  }
+
+  .error:empty {
+    display: none;
+  }
+
+  .date-inputs {
+    --v-gutter: calc(8 / 16 * 1rem);
+  }
+
+  .date-inputs input {
+    width: calc(72 / 16 * 1rem);
+  }
+</style>

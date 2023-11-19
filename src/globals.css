@@ -1,0 +1,82 @@
+/* space-grotesk-500 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/space-grotesk-v16-latin-500.woff2') format('woff2');
+}
+
+:root {
+  --error: 0 100% 66%;
+  --active-border: ;
+  --light-grayish-violet: 270 3% 87%;
+  --dark-grayish-violet: 279 6% 55%;
+  --very-dark-violet: 278 68% 11%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid orange;
+  outline-offset: 1px;
+}
+
+img {
+  display: block;
+}
+
+body {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+}
+
+.preview {
+  --n: 375;
+  --d: 240;
+}
+
+.content {
+  padding: calc(24 / 16 * 1rem);
+}
+
+.attribution {
+  font-size: 11px;
+  text-align: center;
+}
+
+.attribution a {
+  color: hsl(228, 45%, 44%);
+}
+
+/* Utilities */
+.flex {
+  display: flex;
+}
+
+.gap {
+  row-gap: var(--h-gutter, var(--gutter));
+  column-gap: var(--v-gutter, var(--gutter));
+}
+
+.frame {
+  aspect-ratio: var(--n) / var(--d);
+}
+
+.frame > img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper {
+  max-width: calc(381 / 16 * 1rem);
+  margin-inline: auto;
+}

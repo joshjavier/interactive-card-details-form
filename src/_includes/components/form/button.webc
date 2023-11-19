@@ -1,0 +1,12 @@
+<button @text="content" webc:nokeep></button>
+
+<style webc:scoped>
+  :host {
+    border: none;
+    border-radius: calc(8 / 16 * 1rem);
+    padding: calc(15 / 16 * 1rem);
+    color: white;
+    background-color: hsl(var(--very-dark-violet));
+    cursor: pointer;
+  }
+</style>

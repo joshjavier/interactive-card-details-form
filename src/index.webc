@@ -1,0 +1,9 @@
+---
+layout: 'layouts/base.webc'
+title: 'Frontend Mentor | Interactive card details form'
+description: 'An interactive card details form built with 11ty WebC by Josh Javier, a frontend developer from Manila.'
+---
+
+<main>
+  <card-details-form webc:nokeep></card-details-form>
+</main>
