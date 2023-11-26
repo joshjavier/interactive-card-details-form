@@ -2,7 +2,7 @@
 
 <div webc:if="datefield" class="date-inputs flex gap">
   <input type="text" :id="id" placeholder="MM" maxlength="2" />
-  <input type="text" placeholder="YY" maxlength="2" />
+  <input type="text" :id="`${id}-year`" placeholder="YY" maxlength="2" />
 </div>
 <div webc:else>
   <input
@@ -10,6 +10,7 @@
     :id="id"
     :placeholder="placeholder"
     :aria-describedby="`${id}-error`"
+    :maxlength="maxlength"
   />
 </div>
 

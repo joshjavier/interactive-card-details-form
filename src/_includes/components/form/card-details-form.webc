@@ -1,4 +1,4 @@
-<form class="flex gap wrapper">
+<form webc:root="override" class="flex gap wrapper">
   <div class="fields flex gap">
     <text-field
       @id="card-name"
@@ -10,6 +10,7 @@
       @id="card-number"
       @label="Card Number"
       @placeholder="e.g. 1234 5678 9123 0000"
+      @maxlength="16"
     ></text-field>
 
     <div class="detail-fields flex gap">

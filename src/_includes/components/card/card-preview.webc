@@ -1,0 +1,100 @@
+<!--- MARKUP START --->
+<div webc:if="side === 'front'" webc:root>
+  <logo></logo>
+  <output class="card-number" for="card-number" @text="number"></output>
+  <div class="card-details flex">
+    <output class="card-name" for="card-name" @text="name"></output>
+    <div class="card-exp">
+      <output for="card-exp" @text="exp.slice(0, 2)"></output>/<output
+        for="card-exp-year"
+        @text="exp.slice(3)"
+      ></output>
+    </div>
+  </div>
+</div>
+
+<div webc:if="side === 'back'" webc:root>
+  <div class="card-cvc" data-input="card-cvc" @text="cvc"></div>
+</div>
+<!--- MARKUP END --->
+
+<style webc:scoped>
+  :host {
+    display: block;
+    padding: 17.88px 21px 20px 20px;
+    width: 286px;
+    aspect-ratio: 447 / 245;
+    border-radius: 6px;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  :host[side='front'] {
+    background-color: hsl(249 99% 64%);
+    background-image: url('/images/bg-card-front.png');
+  }
+
+  :host[side='back'] {
+    position: relative;
+    background-color: #fff;
+    background-image: url('/images/bg-card-back.png');
+  }
+
+  [class^='card'] {
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .card-number {
+    display: block;
+    font-size: 18px;
+    letter-spacing: 2.16px;
+    margin-top: 37.38px;
+  }
+
+  .card-details {
+    margin-top: 16px;
+    justify-content: space-between;
+  }
+
+  .card-details,
+  .card-cvc {
+    font-size: 10px;
+    letter-spacing: 0.7px;
+  }
+
+  .card-cvc {
+    position: absolute;
+    top: 70px;
+    left: 227px;
+  }
+
+  @media screen and (min-width: 40rem) {
+    :host {
+      width: 447px;
+      padding: 28px 33px 26px 32px;
+      border-radius: 10px;
+    }
+
+    .card-number {
+      margin-top: 64px;
+      font-size: 28px;
+      letter-spacing: 3.36px;
+    }
+
+    .card-details {
+      margin-top: 25px;
+    }
+
+    .card-details,
+    .card-cvc {
+      font-size: 15px;
+      letter-spacing: 1.35px;
+    }
+
+    .card-cvc {
+      top: 111px;
+      left: 356px;
+    }
+  }
+</style>

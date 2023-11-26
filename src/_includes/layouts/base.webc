@@ -13,8 +13,10 @@
     />
 
     <link rel="stylesheet" href="/globals.css" webc:keep />
-    <!--- WebC inline bundles --->
     <style @raw="getBundle('css')" webc:keep></style>
   </head>
-  <body @raw="content"></body>
+  <body>
+    <template @raw="content" webc:nokeep></template>
+    <script @raw="getBundle('js')" webc:keep></script>
+  </body>
 </html>
