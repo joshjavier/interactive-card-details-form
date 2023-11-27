@@ -5,12 +5,7 @@ description: 'An interactive card details form built with 11ty WebC by Josh Javi
 ---
 
 <main>
-  <card-preview
-    side="front"
-    @number="0000 0000 0000 0000"
-    @name="Jane Appleseed"
-    @exp="00/00"
-  ></card-preview>
-  <card-preview side="back" @cvc="000"></card-preview>
-  <card-details-form></card-details-form>
+  <card-preview side="front"></card-preview>
+  <card-preview side="back"></card-preview>
+  <card-details-form id="cardDetailsForm"></card-details-form>
 </main>

@@ -1,8 +1,20 @@
 <label :for="id" @text="label"></label>
 
 <div webc:if="datefield" class="date-inputs flex gap">
-  <input type="text" :id="id" placeholder="MM" maxlength="2" />
-  <input type="text" :id="`${id}-year`" placeholder="YY" maxlength="2" />
+  <input
+    type="text"
+    :id="`${id}Month`"
+    placeholder="MM"
+    maxlength="2"
+    name="expMonth"
+  />
+  <input
+    type="text"
+    :id="`${id}Year`"
+    placeholder="YY"
+    maxlength="2"
+    name="expYear"
+  />
 </div>
 <div webc:else>
   <input
@@ -11,6 +23,7 @@
     :placeholder="placeholder"
     :aria-describedby="`${id}-error`"
     :maxlength="maxlength"
+    :name="name"
   />
 </div>
 

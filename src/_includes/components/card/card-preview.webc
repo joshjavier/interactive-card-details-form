@@ -1,20 +1,106 @@
+<script>
+  class CardPreview extends HTMLElement {
+    // Default ids of form elements
+    _CARD_FORM = 'cardDetailsForm';
+    _CARD_NUMBER = 'cardNumber';
+    _CARD_NAME = 'cardName';
+    _CARD_EXP_MONTH = 'cardExpMonth';
+    _CARD_EXP_YEAR = 'cardExpYear';
+    _CARD_CVC = 'cardCvc';
+
+    inputs = {};
+    outputs = {};
+
+    connectedCallback() {
+      this.inputs = document.getElementById(this._CARD_FORM).elements;
+
+      if (this.getAttribute('side') === 'front') {
+        // Bind reactive elements
+        this.outputs = {
+          number: this.querySelector(`output[for=${this._CARD_NUMBER}]`),
+          name: this.querySelector(`output[for=${this._CARD_NAME}]`),
+          expMonth: this.querySelector(`output[for=${this._CARD_EXP_MONTH}]`),
+          expYear: this.querySelector(`output[for=${this._CARD_EXP_YEAR}]`),
+        };
+
+        // Set initial values as placeholders
+        this._number = this.outputs.number.textContent;
+        this._name = this.outputs.name.textContent;
+        this._expMonth = this.outputs.expMonth.textContent;
+        this._expYear = this.outputs.expYear.textContent;
+      }
+
+      if (this.getAttribute('side') === 'back') {
+        this.outputs.cvc = this.querySelector(`output[for=${this._CARD_CVC}]`);
+        this._cvc = this.outputs.cvc.textContent;
+      }
+
+      for (const key in this.outputs) {
+        const input = this.inputs[key];
+
+        // Add event listeners to inputs
+        input.addEventListener('input', (event) => {
+          this[event.target.name] = event.target.value;
+        });
+
+        // "Hydrate" the outputs with the form values
+        this[key] = input.value;
+      }
+    }
+
+    set name(val) {
+      this.querySelector(`output[for=${this._CARD_NAME}]`).textContent =
+        val || this._name;
+    }
+
+    set number(val) {
+      this.querySelector(`output[for=${this._CARD_NUMBER}]`).textContent =
+        val || this._number;
+    }
+
+    set expMonth(val) {
+      this.querySelector(`output[for=${this._CARD_EXP_MONTH}]`).textContent =
+        val || this._expMonth;
+    }
+
+    set expYear(val) {
+      this.querySelector(`output[for=${this._CARD_EXP_YEAR}]`).textContent =
+        val || this._expYear;
+    }
+
+    set cvc(val) {
+      this.querySelector(`output[for=${this._CARD_CVC}]`).textContent =
+        val || this._cvc;
+    }
+  }
+
+  if (!customElements.get('card-preview')) {
+    customElements.define('card-preview', CardPreview);
+  }
+</script>
+
 <!--- MARKUP START --->
 <div webc:if="side === 'front'" webc:root>
   <logo></logo>
-  <output class="card-number" for="card-number" @text="number"></output>
+  <output class="card-number" for="cardNumber" @text="number">
+    0000 0000 0000 0000
+  </output>
   <div class="card-details flex">
-    <output class="card-name" for="card-name" @text="name"></output>
+    <output class="card-name" for="cardName" @text="name">
+      Jane Appleseed
+    </output>
     <div class="card-exp">
-      <output for="card-exp" @text="exp.slice(0, 2)"></output>/<output
-        for="card-exp-year"
-        @text="exp.slice(3)"
-      ></output>
+      <output for="cardExpMonth" @text="exp?.slice(0, 2)">00</output>/<output
+        for="cardExpYear"
+        @text="exp?.slice(3)"
+        >00</output
+      >
     </div>
   </div>
 </div>
 
 <div webc:if="side === 'back'" webc:root>
-  <div class="card-cvc" data-input="card-cvc" @text="cvc"></div>
+  <output class="card-cvc" for="cardCvc" @text="cvc">000</output>
 </div>
 <!--- MARKUP END --->
 
