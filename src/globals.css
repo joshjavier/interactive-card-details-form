@@ -77,6 +77,6 @@ body {
 }
 
 .wrapper {
-  max-width: calc(381 / 16 * 1rem);
+  max-width: var(--wrapper-max-width, 30rem);
   margin-inline: auto;
 }

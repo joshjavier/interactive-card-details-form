@@ -129,6 +129,7 @@
   [class^='card'] {
     color: #fff;
     text-transform: uppercase;
+    transition: all 300ms;
   }
 
   .card-number {
@@ -155,7 +156,7 @@
     left: 227px;
   }
 
-  @media screen and (min-width: 40rem) {
+  @media screen and (min-width: 1000px) {
     :host {
       width: 447px;
       padding: 28px 33px 26px 32px;

@@ -5,7 +5,126 @@ description: 'An interactive card details form built with 11ty WebC by Josh Javi
 ---
 
 <main>
-  <card-preview side="front"></card-preview>
-  <card-preview side="back"></card-preview>
-  <card-details-form id="cardDetailsForm"></card-details-form>
+  <section class="preview-container">
+    <div class="preview-container-inner wrapper">
+      <card-preview side="front"></card-preview>
+      <card-preview side="back"></card-preview>
+    </div>
+  </section>
+  <section class="form-container">
+    <card-details-form id="cardDetailsForm"></card-details-form>
+  </section>
 </main>
+
+<style>
+  main {
+    min-height: 100vh;
+  }
+
+  .preview-container {
+    background-color: hsl(var(--very-dark-violet));
+    background-image: url('/images/bg-main-mobile.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 240px;
+    --wrapper-max-width: 375px;
+  }
+
+  .preview-container-inner {
+    position: relative;
+  }
+
+  card-preview {
+    position: absolute;
+    transition:
+      all 300ms,
+      margin 0s;
+  }
+
+  card-preview[side='front'] {
+    top: 126px;
+    left: 16px;
+    z-index: 1;
+  }
+
+  card-preview[side='back'] {
+    top: 32px;
+    left: 73px;
+  }
+
+  /* Compress card previews on extra small screens */
+  @media screen and (max-width: 365px) {
+    card-preview[side='front'],
+    card-preview[side='back'] {
+      left: 50%;
+    }
+
+    card-preview[side='front'] {
+      translate: -52%;
+    }
+
+    card-preview[side='back'] {
+      translate: -48%;
+    }
+  }
+
+  .form-container {
+    padding-top: 91px;
+    padding-inline: 24px;
+    padding-bottom: 45px;
+    flex-grow: 1;
+  }
+
+  /* Switch to vertical split layout */
+  @media screen and (min-width: 700px) {
+    main {
+      display: flex;
+    }
+
+    main > [class$='container'] {
+      display: grid;
+      place-items: center;
+      padding-block: 0px;
+    }
+
+    .preview-container {
+      height: unset;
+      width: 50%;
+      --wrapper-max-width: 100%;
+      background-image: url('/images/bg-main-desktop.png');
+    }
+
+    card-preview[side] {
+      position: unset;
+      top: unset;
+      left: unset;
+    }
+
+    card-preview + card-preview {
+      margin-top: 37px;
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    .preview-container {
+      width: 33.54%;
+    }
+
+    .preview-container-inner {
+      margin-left: clamp(
+        1.5rem,
+        -18.5284rem + 32.0455vw,
+        11.4583vw
+      ); /* 24 -> 165 */
+    }
+
+    card-preview[side='back'] {
+      margin-left: clamp(0rem, -13.3523rem + 21.3636vw, 5.875rem); /* 0 -> 94 */
+    }
+
+    .form-container > * {
+      /* Start with a litle more space on the left, then shift to center as whitespace grows to balance composition */
+      translate: clamp(0rem, 15.25rem + -12.7083vw, 12.73%);
+    }
+  }
+</style>

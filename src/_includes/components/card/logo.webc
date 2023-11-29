@@ -13,9 +13,10 @@
   :host {
     display: block;
     height: auto;
+    transition: all 300ms;
   }
 
-  @media screen and (max-width: 40rem) {
+  @media screen and (max-width: 1000px) {
     :host {
       width: 53.74px;
     }
