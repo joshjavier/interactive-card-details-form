@@ -1,4 +1,231 @@
-<form webc:root="override" class="flex gap wrapper">
+<script>
+  class CardDetailsForm extends HTMLFormElement {
+    formErrors = {
+      name: false,
+      number: false,
+      expDate: false,
+      cvc: false,
+    };
+
+    connectedCallback() {
+      const elName = this.querySelector('#cardName');
+      const elNumber = this.querySelector('#cardNumber');
+      const elExpMonth = this.querySelector('#cardExpMonth');
+      const elExpYear = this.querySelector('#cardExpYear');
+      const elCvc = this.querySelector('#cardCvc');
+      const elSuccess = document.querySelector('#success');
+
+      // Focus management
+      elExpMonth.addEventListener('input', (e) => {
+        if (e.target.value.length === 2) {
+          elExpYear.focus();
+        }
+      });
+
+      // Zero pad month and year fields
+      elExpMonth.addEventListener('blur', (e) => {
+        if (e.target.value.length === 1 && Number(e.target.value)) {
+          e.target.value = '0' + e.target.value;
+        }
+      });
+      elExpYear.addEventListener('blur', (e) => {
+        if (e.target.value.length === 1 && Number(e.target.value)) {
+          e.target.value = '0' + e.target.value;
+        }
+      });
+
+      // Instant and afterward validations
+      this.validateField({ elField: elName, validateFn: this.validateName });
+      this.validateField({ elField: elNumber, validateFn: this.validateNumber });
+      this.validateField({ elField: elExpMonth, validateFn: this.validateExpDate });
+      this.validateField({ elField: elExpYear, validateFn: this.validateExpDate });
+      this.validateField({ elField: elCvc, validateFn: this.validateCvc });
+
+      // Submit validations
+      this.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        this.validateName(elName);
+        this.validateNumber(elNumber);
+        this.validateExpDate(elExpMonth);
+        this.validateExpDate(elExpYear);
+        this.validateCvc(elCvc);
+
+        const noFormErrors = Object.values(this.formErrors).every((e) => !e);
+
+        if (!noFormErrors) {
+          // Shift focus to the first form field with an error
+          const errors = Object.keys(this.formErrors).filter((key) => this.formErrors[key]);
+          let firstErrorEl;
+          switch (errors[0]) {
+            case 'name':
+              firstErrorEl = elName;
+              break;
+            case 'number':
+              firstErrorEl = elNumber;
+              break;
+            case 'expDate':
+              firstErrorEl =
+                elExpMonth.getAttribute('aria-invalid') === 'true' ? elExpMonth : elExpYear;
+              break;
+            default:
+              firstErrorEl = elCvc;
+              break;
+          }
+          firstErrorEl.focus();
+        } else {
+          // Hide form and reset form fields
+          this.style.display = 'none';
+          this.reset();
+
+          // Show success message
+          elSuccess.removeAttribute('hidden');
+          elSuccess.classList.add('flex');
+          tl.restart();
+        }
+      });
+    }
+
+    /** Name field validator. */
+    validateName = (el, opts) => {
+      const name = el.value.trim();
+      const isEmpty = name === '';
+
+      if (isEmpty) {
+        this.formErrors.name = true;
+        this.updateFieldDOM(el, !isEmpty, "Can't be blank.", opts);
+      } else {
+        const hasLettersOnly = name.match(/^[ a-zA-Z]*$/);
+        const isWithinRange = name.match(/^.{3,26}$/);
+        const isNameValid = hasLettersOnly && isWithinRange;
+
+        let errorMsgs = [];
+        if (!hasLettersOnly) errorMsgs.push('Letters only.');
+        if (!isWithinRange) errorMsgs.push('Must be 3 to 26 characters.');
+
+        this.formErrors.name = !isNameValid;
+        this.updateFieldDOM(el, isNameValid, errorMsgs.join(' '), opts);
+      }
+    };
+
+    /** Number field validator. */
+    validateNumber = (el, opts) => {
+      const number = el.value.trim();
+      const isEmpty = number === '';
+
+      if (isEmpty) {
+        this.formErrors.number = true;
+        this.updateFieldDOM(el, !isEmpty, "Can't be blank.", opts);
+      } else {
+        const hasNumbersOnly = number.match(/^\d*$/);
+        const isWithinRange = number.match(/^.{13,16}$/);
+        const isNumberValid = hasNumbersOnly && isWithinRange;
+
+        let errorMsgs = [];
+        if (!hasNumbersOnly) errorMsgs.push('Wrong format, numbers only.');
+        if (!isWithinRange) errorMsgs.push('Must be 13 to 16 digits.');
+
+        this.formErrors.number = !isNumberValid;
+        this.updateFieldDOM(el, isNumberValid, errorMsgs.join(' '), opts);
+      }
+    };
+
+    /** Expiry date field validator. */
+    validateExpDate = (el, opts) => {
+      const value = el.value.trim();
+      const isEmpty = value === '';
+
+      if (isEmpty) {
+        this.formErrors.expDate = true;
+        this.updateFieldDOM(el, !isEmpty, "Can't be blank.", opts);
+      } else if (el.id === 'cardExpMonth') {
+        const isMonthValid = Number(value) >= 1 && Number(value) <= 12;
+        this.formErrors.expDate = !isMonthValid;
+        this.updateFieldDOM(el, isMonthValid, 'Invalid month or year.', opts);
+      } else if (el.id === 'cardExpYear') {
+        const isYearValid = Number(value);
+        this.formErrors.expDate = !isYearValid;
+        this.updateFieldDOM(el, isYearValid, 'Invalid month or year.', opts);
+      }
+    };
+
+    /** CVC field validator. */
+    validateCvc = (el, opts) => {
+      const cvc = el.value.trim();
+      const isEmpty = cvc === '';
+
+      if (isEmpty) {
+        this.formErrors.cvc = true;
+        this.updateFieldDOM(el, !isEmpty, "Can't be blank.", opts);
+      } else {
+        const hasNumbersOnly = cvc.match(/^\d*$/);
+        const isWithinRange = cvc.match(/^.{3,4}$/);
+        const isCvcValid = hasNumbersOnly && isWithinRange;
+
+        let errorMsgs = [];
+        if (!hasNumbersOnly) errorMsgs.push('Wrong format, numbers only.');
+        if (!isWithinRange) errorMsgs.push('Must be 3 to 4 digits.');
+
+        this.formErrors.cvc = !isCvcValid;
+        this.updateFieldDOM(el, isCvcValid, errorMsgs.join(' '), opts);
+      }
+    };
+
+    /**
+     * Binds a validator function to a form field for instant and afterward validations.
+     * @param {object} elField - The form field, e.g. input element
+     * @param {validateCallback} validateFn - The validator function
+     */
+    validateField({ elField, validateFn }) {
+      let touched = false;
+
+      elField.addEventListener('change', () => {
+        touched = true; // only proceed with validation once user changes value
+      });
+      elField.addEventListener('blur', (e) => {
+        if (!touched && e.target.value === '') return;
+        validateFn(e.target, { live: true });
+      });
+      elField.addEventListener('input', (e) => {
+        // remove error if any once field value satisfies validation
+        validateFn(e.target, { removeOnly: true });
+      });
+    }
+
+    /**
+     * Updates error messages and sets attributes based on field validity.
+     * @param {object} el - The form field, e.g. input element
+     * @param {boolean} isValid - Whether the form field is valid
+     * @param {string} errorMessage - To display when field is invalid
+     * @param {object} opts
+     * @param {boolean} opts.live - If true, set alert's aria-live attribute to `assertive`
+     * @param {boolean} opts.removeOnly - If true, only removes error alert and attributes
+     */
+    updateFieldDOM(el, isValid, errorMessage, opts) {
+      const removeOnly = opts?.removeOnly;
+      const isLive = opts?.live;
+      const elField = el.closest('text-field');
+      const elError = elField.querySelector('.error');
+
+      if (isValid) {
+        elError.textContent = '';
+        el.removeAttribute('aria-invalid');
+      } else if (!removeOnly) {
+        elError.setAttribute('aria-live', isLive ? 'assertive' : 'off');
+        el.setAttribute('aria-invalid', 'true');
+        elError.textContent = errorMessage;
+      }
+    }
+  }
+
+  if (!customElements.get('card-details-form')) {
+    customElements.define('card-details-form', CardDetailsForm, {
+      extends: 'form',
+    });
+  }
+</script>
+
+<form is="card-details-form" webc:root="override" class="flex gap wrapper">
   <div class="fields flex gap">
     <text-field
       @id="cardName"
@@ -17,11 +244,7 @@
     ></text-field>
 
     <div class="detail-fields flex gap">
-      <text-field
-        @id="cardExp"
-        @label="Exp. Date (MM/YY)"
-        @datefield="true"
-      ></text-field>
+      <text-field @id="cardExp" @label="Exp. Date (MM/YY)" @datefield="true"></text-field>
 
       <text-field
         @id="cardCvc"

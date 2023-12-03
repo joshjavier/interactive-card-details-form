@@ -8,5 +8,11 @@
     color: white;
     background-color: hsl(var(--very-dark-violet));
     cursor: pointer;
+    font-size: 18px;
+    transition: scale 30ms;
+  }
+
+  :host:active {
+    scale: 0.98;
   }
 </style>

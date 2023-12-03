@@ -1,0 +1,77 @@
+<script>
+  function handleContinue() {
+    const elSuccess = document.querySelector('#success');
+    const elForm = document.querySelector('#cardDetailsForm');
+    console.log(elSuccess);
+    console.log(elForm);
+
+    // Hide success alert
+    elSuccess.classList.remove('flex');
+    elSuccess.setAttribute('hidden', '');
+
+    // Show form
+    elForm.style.display = null;
+  }
+
+  // Add animations if JavaScript is available
+  let tl = gsap.timeline({
+    paused: true,
+    defaults: { opacity: 0 },
+  });
+
+  tl.addLabel('start')
+    .from('#success > img', { scale: 0.4, ease: 'back.out(2)', duration: '0.4' })
+    .addLabel('title')
+    .from('#success > h2', { y: 10 })
+    .addLabel('description')
+    .from('#success > p', { y: 10 })
+    .addLabel('button')
+    .from('#success > button', {
+      ease: 'back.out(2)',
+      duration: '0.8',
+      delay: 0.8,
+    })
+    .addLabel('end');
+</script>
+
+<div webc:root="override" id="success" class="wrapper" hidden>
+  <img src="/images/icon-complete.svg" alt="" width="80" height="80" />
+  <h2 @text="title">Thank You!</h2>
+  <p @text="description">We’ve added your card details</p>
+  <button onclick="handleContinue()">Continue</button>
+</div>
+
+<style webc:scoped>
+  :host {
+    flex-direction: column;
+    text-align: center;
+    --wrapper-max-width: 381px;
+  }
+
+  img {
+    align-self: center;
+    margin-bottom: 34px;
+  }
+
+  h2 {
+    margin-block: 0;
+    text-transform: uppercase;
+    color: hsl(var(--very-dark-violet));
+    letter-spacing: 3.36px;
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 18px;
+    letter-spacing: 0.09px;
+    color: hsl(var(--dark-grayish-violet));
+  }
+
+  * + p {
+    margin-block: 16px 0;
+  }
+
+  button {
+    margin-top: 48px;
+  }
+</style>

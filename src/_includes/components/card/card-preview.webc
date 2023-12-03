@@ -42,6 +42,9 @@
         input.addEventListener('input', (event) => {
           this[event.target.name] = event.target.value;
         });
+        input.addEventListener('blur', (event) => {
+          this[event.target.name] = event.target.value;
+        });
 
         // "Hydrate" the outputs with the form values
         this[key] = input.value;
@@ -49,28 +52,23 @@
     }
 
     set name(val) {
-      this.querySelector(`output[for=${this._CARD_NAME}]`).textContent =
-        val || this._name;
+      this.querySelector(`output[for=${this._CARD_NAME}]`).textContent = val || this._name;
     }
 
     set number(val) {
-      this.querySelector(`output[for=${this._CARD_NUMBER}]`).textContent =
-        val || this._number;
+      this.querySelector(`output[for=${this._CARD_NUMBER}]`).textContent = val || this._number;
     }
 
     set expMonth(val) {
-      this.querySelector(`output[for=${this._CARD_EXP_MONTH}]`).textContent =
-        val || this._expMonth;
+      this.querySelector(`output[for=${this._CARD_EXP_MONTH}]`).textContent = val || this._expMonth;
     }
 
     set expYear(val) {
-      this.querySelector(`output[for=${this._CARD_EXP_YEAR}]`).textContent =
-        val || this._expYear;
+      this.querySelector(`output[for=${this._CARD_EXP_YEAR}]`).textContent = val || this._expYear;
     }
 
     set cvc(val) {
-      this.querySelector(`output[for=${this._CARD_CVC}]`).textContent =
-        val || this._cvc;
+      this.querySelector(`output[for=${this._CARD_CVC}]`).textContent = val || this._cvc;
     }
   }
 
@@ -82,13 +80,9 @@
 <!--- MARKUP START --->
 <div webc:if="side === 'front'" webc:root>
   <logo></logo>
-  <output class="card-number" for="cardNumber" @text="number">
-    0000 0000 0000 0000
-  </output>
+  <output class="card-number" for="cardNumber" @text="number"> 0000 0000 0000 0000 </output>
   <div class="card-details flex">
-    <output class="card-name" for="cardName" @text="name">
-      Jane Appleseed
-    </output>
+    <output class="card-name" for="cardName" @text="name"> Jane Appleseed </output>
     <div class="card-exp">
       <output for="cardExpMonth" @text="exp?.slice(0, 2)">00</output>/<output
         for="cardExpYear"
