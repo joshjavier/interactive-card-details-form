@@ -110,7 +110,7 @@
 
     /** Number field validator. */
     validateNumber = (el, opts) => {
-      const number = el.value.trim();
+      const number = el.value.trim().replace(/\s/g, '');
       const isEmpty = number === '';
 
       if (isEmpty) {
@@ -239,7 +239,7 @@
       @id="cardNumber"
       @label="Card Number"
       @placeholder="e.g. 1234 5678 9123 0000"
-      @maxlength="16"
+      @maxlength="19"
       @name="number"
     ></text-field>
 

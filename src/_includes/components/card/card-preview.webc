@@ -56,14 +56,18 @@
     }
 
     set number(val) {
+      val = val.replace(/\s/g, '');
+      val = val.replace(/\d{4}(?=.)/g, '$& ');
       this.querySelector(`output[for=${this._CARD_NUMBER}]`).textContent = val || this._number;
     }
 
     set expMonth(val) {
+      val = val.length === 1 ? '0' + val : val;
       this.querySelector(`output[for=${this._CARD_EXP_MONTH}]`).textContent = val || this._expMonth;
     }
 
     set expYear(val) {
+      val = val.length === 1 ? '0' + val : val;
       this.querySelector(`output[for=${this._CARD_EXP_YEAR}]`).textContent = val || this._expYear;
     }
 
