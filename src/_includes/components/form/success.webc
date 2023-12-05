@@ -2,8 +2,6 @@
   function handleContinue() {
     const elSuccess = document.querySelector('#success');
     const elForm = document.querySelector('#cardDetailsForm');
-    console.log(elSuccess);
-    console.log(elForm);
 
     // Hide success alert
     elSuccess.classList.remove('flex');
